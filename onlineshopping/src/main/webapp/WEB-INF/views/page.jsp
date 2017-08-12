@@ -27,7 +27,7 @@
 <!-- Bootstrap Core CSS -->
 <link href="${css}/bootstrap.min.css" rel="stylesheet">
 
-<!-- Bootstrap Readable Theme CSS -->
+<!-- Bootstrap Readable Theme CSS updating-->
 <link href="${css}/bootstrap-readable-theme.css" rel="stylesheet">
 
 
