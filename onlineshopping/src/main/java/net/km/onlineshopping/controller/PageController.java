@@ -1,24 +1,37 @@
 package net.km.onlineshopping.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.km.shoppinbackend.dto.Category;
+import net.km.onlineshopping.exception.ProductNotFoundException;
 import net.km.shoppingbackend.dao.CategoryDAO;
+import net.km.shoppingbackend.dao.ProductDAO;
+import net.km.shoppingbackend.dto.Category;
+import net.km.shoppingbackend.dto.Product;
 
 @Controller
 public class PageController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+	
 	@Autowired
 	private CategoryDAO categoryDAO;
+	
+	@Autowired
+	private ProductDAO productDAO;
 	
 	@RequestMapping(value = {"/" , "/home" , "/index"})
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView("page");
 		mv.addObject("title", "Home");
+		
+		logger.info("PageController idex method-IFO");
+		logger.debug("PageController idex method-debug");
 		//passing the list of categories
 		mv.addObject("categories", categoryDAO.list());
 		mv.addObject("userClickHome", true);
@@ -72,6 +85,32 @@ public class PageController {
 		mv.addObject("userClickCategoryProducts", true);
 		return  mv;
 	}
+	
+	@RequestMapping(value = "/show/{id}/product")
+	public ModelAndView showSingleProduct(@PathVariable("id") int id) throws ProductNotFoundException {
+		ModelAndView mv = new ModelAndView("page");
+		//categoryDAO to fetch single category
+		
+		Product product=null;
+		
+		product=productDAO.get(id);
+		
+		if(product == null){
+			throw new ProductNotFoundException();
+		}
+		//update views in database
+		product.setViews(product.getViews()+1);
+		productDAO.update(product);
+		mv.addObject("title", product.getName());
+		//passing the list of categories
+		mv.addObject("product", product);
+		
+		//passing single category
+		//mv.addObject("category", category);
+		mv.addObject("userClickShowProduct", true);
+		return  mv;
+	}
+	
 	/*@RequestMapping(value="/test/{greeting}")
 	public ModelAndView test(@PathVariable(value="greeting",required=false)String greeting) {
 		
