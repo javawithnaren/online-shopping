@@ -24,6 +24,9 @@
                     <li id="listProducts">
                         <a href="${contextRoot}/show/all/products">view products</a>
                     </li>
+                    <li id="manageProducts">
+                        <a href="${contextRoot}/manage/products">Manage products</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
